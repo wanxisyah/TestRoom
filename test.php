@@ -29,12 +29,14 @@ class Person {
         echo "Name: {$this->name}, Age: {$this->age}\n";
     }
 
-    public function toJson(): string {
-        return json_encode(['Name' => $this->name, 'Age' => $this->age], JSON_PRETTY_PRINT);
+    public function toJson(): array {
+        return ['Name' => $this->name, 'Age' => $this->age];
     }
 
-    public function toXML(): string {
-        return "<Person><Name>{$this->name}</Name><Age>{$this->age}</Age></Person>";
+    public function toXML(SimpleXMLElement $parentNode): void {
+        $personNode = $parentNode->addChild('Person');
+        $personNode->addChild('Name', $this->name);
+        $personNode->addChild('Age', $this->age);
     }
 }
 
@@ -52,6 +54,22 @@ class Staff extends Person {
 
     public function setSalary(float $salary): void {
         $this->salary = $salary;
+    }
+
+    // FIX: Ensure the salary is displayed for Staff
+    public function show(): void {
+        echo "Name: {$this->getName()}, Age: {$this->getAge()}, Salary: RM " . number_format($this->salary, 2) . "\n";
+    }
+
+    public function toJson(): array {
+        return array_merge(parent::toJson(), ['Salary' => "RM " . number_format($this->salary, 2)]);
+    }
+
+    public function toXML(SimpleXMLElement $parentNode): void {
+        $staffNode = $parentNode->addChild('Staff');
+        $staffNode->addChild('Name', $this->getName());
+        $staffNode->addChild('Age', $this->getAge());
+        $staffNode->addChild('Salary', 'RM ' . number_format($this->salary, 2));
     }
 }
 
@@ -71,23 +89,22 @@ class Room {
             $person->show();
         }
     }
+
     public function getResult(string $format): string {
         if ($format === "JSON") {
-            return json_encode(array_map(fn($p) => ['Name' => $p->getName(), 'Age' => $p->getAge()], $this->persons), JSON_PRETTY_PRINT);
+            return json_encode(array_map(fn($p) => $p->toJson(), $this->persons), JSON_PRETTY_PRINT);
         } elseif ($format === "XML") {
-            $xml = new SimpleXMLElement('<Room/>');
-            
+            $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><Room/>');
+
             foreach ($this->persons as $p) {
-                $personNode = $xml->addChild('Person');
-                $personNode->addChild('Name', $p->getName());
-                $personNode->addChild('Age', $p->getAge());
+                $p->toXML($xml);
             }
-    
-            $dom = new DOMDocument("1.0");
+
+            $dom = new DOMDocument("1.0", "UTF-8");
             $dom->preserveWhiteSpace = false;
             $dom->formatOutput = true;
             $dom->loadXML($xml->asXML());
-    
+
             return $dom->saveXML();
         } else {
             return "Invalid format.";
@@ -95,11 +112,13 @@ class Room {
     }
 }
 
+// Create Room and add Persons and Staff
 $room = new Room();
-$room->addPerson(new Person("Wan Aisyah Mahsuri", 23)); 
-$room->addPerson(new Staff("Kwon Beom Jin", 30, 5500.00)); 
-$room->addPerson(new Person("Kim Sun Gu", 28)); 
+$room->addPerson(new Person("Wan Aisyah Mahsuri", 23));
+$room->addPerson(new Staff("Kwon Beom Jin", 30, 5500.00));
+$room->addPerson(new Person("Kim Sun Gu", 28));
 
+// Display Output
 $room->show();
 
 echo "\nJSON Format:\n";

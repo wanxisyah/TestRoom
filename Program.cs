@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Xml.Linq;
+using System.Linq;
 
 class Person {
     public string Name { get; set; }
@@ -12,19 +13,22 @@ class Person {
         Age = age;
     }
 
-    public void Show() {
+    public virtual void Show() {
         Console.WriteLine($"Name: {Name}, Age: {Age}");
     }
 
-    public string ToJson() {
-        return JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+    public virtual object ToJson() {
+        return new {
+            Name,
+            Age
+        };
     }
 
-    public string ToXML() {
-        return new XElement("person",
-            new XElement("name", Name),
-            new XElement("age", Age)
-        ).ToString();
+    public virtual XElement ToXML() {
+        return new XElement("Person",
+            new XElement("Name", Name),
+            new XElement("Age", Age)
+        );
     }
 }
 
@@ -36,7 +40,31 @@ class Staff : Person {
     }
 
     public double GetSalary() => Salary;
-    public void SetSalary(double salary) => Salary = salary;
+
+    public override void Show() {
+        Console.WriteLine($"Name: {Name}, Age: {Age}, Salary: RM {Salary:N2}");
+    }
+
+    public override object ToJson() {
+        return new {
+            Name,
+            Age,
+            Salary = Salary > 0 ? $"RM {Salary:N2}" : null
+        };
+    }
+
+    public override XElement ToXML() {
+        XElement staffElement = new XElement("Staff",
+            new XElement("Name", Name),
+            new XElement("Age", Age)
+        );
+
+        if (Salary > 0) {
+            staffElement.Add(new XElement("Salary", $"RM {Salary:N2}"));
+        }
+
+        return staffElement;
+    }
 }
 
 class Room {
@@ -58,13 +86,17 @@ class Room {
 
     public string GetResult(string format) {
         if (format.ToLower() == "json") {
-            return JsonSerializer.Serialize(Persons, new JsonSerializerOptions { WriteIndented = true });
-        } else {
-            XElement roomElement = new XElement("room");
-            foreach (var person in Persons) {
-                roomElement.Add(XElement.Parse(person.ToXML()));
-            }
-            return roomElement.ToString();
+            var personsData = Persons.Select(p => p.ToJson()).ToList();
+            return JsonSerializer.Serialize(personsData, new JsonSerializerOptions { WriteIndented = true });
+        } 
+        else if (format.ToLower() == "xml") {
+            XElement roomElement = new XElement("Room",
+                Persons.Select(p => p.ToXML())
+            );
+            return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + roomElement.ToString();
+        } 
+        else {
+            return "Invalid format.";
         }
     }
 }
@@ -79,7 +111,6 @@ class Program {
         room.Show();
 
         Console.WriteLine("\nJSON Format:\n" + room.GetResult("json"));
-
         Console.WriteLine("\nXML Format:\n" + room.GetResult("xml"));
     }
 }
