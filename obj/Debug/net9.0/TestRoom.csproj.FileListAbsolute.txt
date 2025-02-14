@@ -1,0 +1,14 @@
+c:\Users\mahsuri\TestRoom\bin\Debug\net9.0\TestRoom.exe
+c:\Users\mahsuri\TestRoom\bin\Debug\net9.0\TestRoom.deps.json
+c:\Users\mahsuri\TestRoom\bin\Debug\net9.0\TestRoom.runtimeconfig.json
+c:\Users\mahsuri\TestRoom\bin\Debug\net9.0\TestRoom.dll
+c:\Users\mahsuri\TestRoom\bin\Debug\net9.0\TestRoom.pdb
+c:\Users\mahsuri\TestRoom\obj\Debug\net9.0\TestRoom.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\mahsuri\TestRoom\obj\Debug\net9.0\TestRoom.AssemblyInfoInputs.cache
+c:\Users\mahsuri\TestRoom\obj\Debug\net9.0\TestRoom.AssemblyInfo.cs
+c:\Users\mahsuri\TestRoom\obj\Debug\net9.0\TestRoom.csproj.CoreCompileInputs.cache
+c:\Users\mahsuri\TestRoom\obj\Debug\net9.0\TestRoom.dll
+c:\Users\mahsuri\TestRoom\obj\Debug\net9.0\refint\TestRoom.dll
+c:\Users\mahsuri\TestRoom\obj\Debug\net9.0\TestRoom.pdb
+c:\Users\mahsuri\TestRoom\obj\Debug\net9.0\TestRoom.genruntimeconfig.cache
+c:\Users\mahsuri\TestRoom\obj\Debug\net9.0\ref\TestRoom.dll
