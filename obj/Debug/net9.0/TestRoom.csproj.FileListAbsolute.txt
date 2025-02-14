@@ -12,3 +12,4 @@ c:\Users\mahsuri\TestRoom\obj\Debug\net9.0\refint\TestRoom.dll
 c:\Users\mahsuri\TestRoom\obj\Debug\net9.0\TestRoom.pdb
 c:\Users\mahsuri\TestRoom\obj\Debug\net9.0\TestRoom.genruntimeconfig.cache
 c:\Users\mahsuri\TestRoom\obj\Debug\net9.0\ref\TestRoom.dll
+C:\Users\mahsuri\TestRoom\obj\Debug\net9.0\TestRoom.sourcelink.json

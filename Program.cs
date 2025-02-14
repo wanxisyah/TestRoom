@@ -4,26 +4,20 @@ using System.Text.Json;
 using System.Xml.Linq;
 
 class Person {
-    private string Name;
-    private int Age;
+    public string Name { get; set; }
+    public int Age { get; set; }
 
     public Person(string name, int age) {
         Name = name;
         Age = age;
     }
 
-    public string GetName() => Name;
-    public void SetName(string name) => Name = name;
-
-    public int GetAge() => Age;
-    public void SetAge(int age) => Age = age;
-
     public void Show() {
         Console.WriteLine($"Name: {Name}, Age: {Age}");
     }
 
     public string ToJson() {
-        return JsonSerializer.Serialize(new { Name, Age }, new JsonSerializerOptions { WriteIndented = true });
+        return JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
     }
 
     public string ToXML() {
