@@ -25,7 +25,7 @@ class Person {
     }
 
     public virtual XElement ToXML() {
-        return new XElement("Person",
+        return new XElement("Record",
             new XElement("Name", Name),
             new XElement("Age", Age)
         );
@@ -54,16 +54,9 @@ class Staff : Person {
     }
 
     public override XElement ToXML() {
-        XElement staffElement = new XElement("Staff",
-            new XElement("Name", Name),
-            new XElement("Age", Age)
-        );
-
-        if (Salary > 0) {
-            staffElement.Add(new XElement("Salary", $"RM {Salary:N2}"));
-        }
-
-        return staffElement;
+        XElement recordElement = base.ToXML();
+        recordElement.Add(new XElement("Salary", $"RM {Salary:N2}"));
+        return recordElement;
     }
 }
 
